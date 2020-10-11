@@ -5,3 +5,5 @@ async storage para token
 geolocation para localização do usuário
 react native permissions
 react native svg e svg transformer
+
+Vídeo pausado em 50:00
