@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import AsyncStorage from '@react-native-community/async-storage'
 import { 
   Container,
   InputArea,
@@ -10,6 +11,9 @@ import {
   SignMessageButtonTextBold
 } from './styles'
 
+import Api from '../../Api'
+import { UserContext } from '../../contexts/UserContext'
+
 import SignInput from '../../components/SignInput'
 
 import BarberLogo from '../../assets/barber.svg'
@@ -17,13 +21,39 @@ import EmailIcon from '../../assets/email.svg'
 import LockIcon from '../../assets/lock.svg'
 
 export default () => {
+  const { dispatch: userDispatch } = useContext(UserContext) //dispatch(renomeado para userDispatch) constante para enviar informações para Context
   const navigation = useNavigation()
 
   const [emailField, setEmailField] = useState('')
   const [passwordField, setPasswordField] = useState('')
 
-  const handleSignClick = () => {
+  const handleSignClick = async () => {
+    if(emailField !== '' && passwordField !== '') {
 
+      let json = await Api.signIn(emailField, passwordField)
+      console.log(json)
+
+      if(json.token) { 
+        await AsyncStorage.setItem('token', json.token) //Salva token no async storage
+
+        userDispatch({
+          type: 'setAvatar', //ação definida no reducer
+          payload: {
+            avatar: json.data.avatar //avatar que será salvo no context
+          }
+        })
+
+        navigation.reset({ //impede usuário voltar para tela login
+          routes:[{name: 'MainTab'}]
+        })
+
+      } else {
+        alert('E-mail e/ou senha errados!')
+      }
+
+    } else {
+      alert('Preencha os campos!')
+    } 
   }
 
   const handleMessageButtonClick = () => {

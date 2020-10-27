@@ -7,4 +7,4 @@ react native permissions
 react native svg e svg transformer
 context api
 
-Vídeo pausado em 1:40:00
+Vídeo pausado em 2:30:00
