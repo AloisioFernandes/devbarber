@@ -9,4 +9,4 @@ context api
 
 testador@hotmail.com
 1234
-Vídeo pausado em 2:30:00
+Vídeo pausado em 3:20:00
