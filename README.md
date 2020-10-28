@@ -7,4 +7,6 @@ react native permissions
 react native svg e svg transformer
 context api
 
+testador@hotmail.com
+1234
 Vídeo pausado em 2:30:00

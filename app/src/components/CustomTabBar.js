@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components/native'
+
+import { UserContext } from '../contexts/UserContext'
 
 import HomeIcon from '../assets/home.svg'
 import SearchIcon from '../assets/search.svg'
@@ -19,7 +21,25 @@ const TabItem = styled.TouchableOpacity`
   align-items: center;
 `;
 
+const TabItemCenter = styled.TouchableOpacity`
+  width: 70px;
+  height: 70px;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 35px;
+  border: 3px solid #4eadbe;
+  margin-top: -20px;
+`;
+
+const AvatarIcon = styled.Image`
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+`;
+
 export default ({ state, navigation }) => { //state indica a ordem da tela que está ativa
+  const { state: user } = useContext(UserContext)
 
   const goTo = (screenName) => {
     navigation.navigate(screenName)
@@ -33,14 +53,18 @@ export default ({ state, navigation }) => { //state indica a ordem da tela que e
       <TabItem onPress={() => goTo('Search')}>
         <SearchIcon style={{opacity: state.index === 1 ? 1 : 0.5}} width="24" height="24" fill="#ffffff" />
       </TabItem>
-      <TabItem onPress={() => goTo('Appointments')}>
-        <TodayIcon style={{opacity: state.index === 2 ? 1 : 0.5}} width="24" height="24" fill="#ffffff" />
-      </TabItem>
+      <TabItemCenter onPress={() => goTo('Appointments')}>
+        <TodayIcon width="32" height="32" fill="#4eadbe" />
+      </TabItemCenter>
       <TabItem onPress={() => goTo('Favorites')}>
         <FavoriteIcon style={{opacity: state.index === 3 ? 1 : 0.5}} width="24" height="24" fill="#ffffff" />
       </TabItem>
       <TabItem onPress={() => goTo('Profile')}>
-        <AccountIcon style={{opacity: state.index === 4 ? 1 : 0.5}} width="24" height="24" fill="#ffffff" />
+        {user.avatar !== '' ?
+          <AvatarIcon source={{uri: user.avatar}} />
+          :
+          <AccountIcon style={{opacity: state.index === 4 ? 1 : 0.5}} width="24" height="24" fill="#ffffff" />
+        }
       </TabItem>
     </TabArea>
   )
