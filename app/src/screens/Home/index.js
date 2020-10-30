@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Platform } from 'react-native'
+import { Platform, RefreshControl } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { request, PERMISSIONS } from 'react-native-permissions'
 import Geolocation from '@react-native-community/geolocation'
@@ -79,7 +79,9 @@ export default () => {
 
   return (
     <Container>
-      <Scroller>
+      <Scroller refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={} />
+      }>
 
         <HeaderArea>
           <HeaderTitle numberOfLines={2}>Encontre o seu barbeiro favorito</HeaderTitle>
