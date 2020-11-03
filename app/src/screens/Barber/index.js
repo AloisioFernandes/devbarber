@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Text } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import Swiper from 'react-native-swiper'
 
-import { Container } from './styles'
+import { 
+  Container,
+  Scroller,
+  SwipeDot,
+  SwipeDotActive,
+  SwipeItem,
+  SwipeImage,
+  FakeSwiper,
+  PageBody,
+  UserInfoArea,
+  ServiceArea,
+  TestimonialArea
+} from './styles'
 
 import Api from '../../Api'
 
@@ -16,22 +28,56 @@ export default () => {
     name: route.params.name,
     stars: route.params.stars
   })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const getBarberInfo = async () => {
+      setLoading(true)
+
       let json = await Api.getBarber(userInfo.id)
       if(json.error === '') {
-        //
+        setUserInfo(json.data)
       } else {
         alert('Erro: ' + json.error)
       }
+
+      setLoading(false)
     }
     getBarberInfo()
   }, [])
 
   return (
     <Container>
-      <Text>Barbeiro: {userInfo.name}</Text>
+      <Scroller>
+        {userInfo.photos && userInfo.photos.length > 0 ?
+          <Swiper
+            style={{height: 240}}
+            dot={<SwipeDot />}
+            activeDot={<SwipeDotActive />}
+            paginationStyle={{top: 15, right: 15, bottom: null, left: null}}
+            autoplay={true}
+          >
+            {userInfo.photos.map((item, key) => (
+              <SwipeItem key={key}>
+                <SwipeImage source={{uri: item.url}} resizeMode="cover" />
+              </SwipeItem>
+            ))}
+          </Swiper>
+          :
+          <FakeSwiper></FakeSwiper>
+        }
+        <PageBody>
+          <UserInfoArea>
+
+          </UserInfoArea>
+          <ServiceArea>
+
+          </ServiceArea>
+          <TestimonialArea>
+
+          </TestimonialArea>
+        </PageBody>
+      </Scroller>
     </Container>
   )
 }
