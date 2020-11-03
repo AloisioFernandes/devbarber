@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import Swiper from 'react-native-swiper'
 
+import Stars from '../../components/Stars'
+
+import FavoriteIcon from '../../assets/favorite.svg'
+
 import { 
   Container,
   Scroller,
@@ -13,7 +17,11 @@ import {
   PageBody,
   UserInfoArea,
   ServiceArea,
-  TestimonialArea
+  TestimonialArea,
+  UserAvatar,
+  UserInfo,
+  UserInfoName,
+  UserFavButton
 } from './styles'
 
 import Api from '../../Api'
@@ -68,7 +76,14 @@ export default () => {
         }
         <PageBody>
           <UserInfoArea>
-
+            <UserAvatar source={{uri: userInfo.avatar}} />
+            <UserInfo>
+              <UserInfoName>{userInfo.name}</UserInfoName>
+              <Stars stars={userInfo.stars} showNumber={true} />
+            </UserInfo>
+            <UserFavButton>
+              <FavoriteIcon width="24" height="24" fill="#f00" />
+            </UserFavButton>
           </UserInfoArea>
           <ServiceArea>
 
