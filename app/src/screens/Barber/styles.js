@@ -36,7 +36,10 @@ export const SwipeImage = styled.Image`
   height: 240px;
 `;
 
-export const FakeSwiper = styled.View``;
+export const FakeSwiper = styled.View`
+  height: 240px;
+  background-color: #63c2d1;
+`;
 
 export const PageBody = styled.View`
   background-color: #fff;
@@ -88,3 +91,14 @@ export const UserFavButton = styled.TouchableOpacity`
 export const ServiceArea = styled.View``;
 
 export const TestimonialArea = styled.View``;
+
+export const BackButton = styled.TouchableOpacity`
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 9;
+`;
+
+export const LoadingIcon = styled.ActivityIndicator`
+
+`;

@@ -5,6 +5,7 @@ import Swiper from 'react-native-swiper'
 import Stars from '../../components/Stars'
 
 import FavoriteIcon from '../../assets/favorite.svg'
+import BackIcon from '../../assets/back.svg'
 
 import { 
   Container,
@@ -21,7 +22,9 @@ import {
   UserAvatar,
   UserInfo,
   UserInfoName,
-  UserFavButton
+  UserFavButton,
+  BackButton,
+  LoadingIcon
 } from './styles'
 
 import Api from '../../Api'
@@ -49,10 +52,14 @@ export default () => {
         alert('Erro: ' + json.error)
       }
 
-      setLoading(false)
+      // setLoading(false)
     }
     getBarberInfo()
   }, [])
+
+  const handleBackButton = () => {
+    navigation.goBack()
+  }
 
   return (
     <Container>
@@ -85,6 +92,11 @@ export default () => {
               <FavoriteIcon width="24" height="24" fill="#f00" />
             </UserFavButton>
           </UserInfoArea>
+
+          {loading && 
+            <LoadingIcon size="large" color="#000" />
+          }
+
           <ServiceArea>
 
           </ServiceArea>
@@ -93,6 +105,9 @@ export default () => {
           </TestimonialArea>
         </PageBody>
       </Scroller>
+      <BackButton onPress={handleBackButton}>
+        <BackIcon width="44" height="44" fill="#fff" />
+      </BackButton>
     </Container>
   )
 }
