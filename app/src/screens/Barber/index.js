@@ -10,21 +10,32 @@ import BackIcon from '../../assets/back.svg'
 import { 
   Container,
   Scroller,
+  PageBody,
+  BackButton,
+  LoadingIcon,
+
   SwipeDot,
   SwipeDotActive,
   SwipeItem,
   SwipeImage,
   FakeSwiper,
-  PageBody,
+
   UserInfoArea,
-  ServiceArea,
-  TestimonialArea,
   UserAvatar,
   UserInfo,
   UserInfoName,
   UserFavButton,
-  BackButton,
-  LoadingIcon
+
+  ServiceArea,
+  ServicesTitle,
+  ServiceItem,
+  ServiceInfo,
+  ServiceName,
+  ServicePrice,
+  ServiceChooseButton,
+  ServiceChooseBtnText,
+
+  TestimonialArea
 } from './styles'
 
 import Api from '../../Api'
@@ -52,7 +63,7 @@ export default () => {
         alert('Erro: ' + json.error)
       }
 
-      // setLoading(false)
+      setLoading(false)
     }
     getBarberInfo()
   }, [])
@@ -97,9 +108,24 @@ export default () => {
             <LoadingIcon size="large" color="#000" />
           }
 
-          <ServiceArea>
+          {userInfo.services &&
+            <ServiceArea>
+              <ServicesTitle>Lista de serviços</ServicesTitle>
 
-          </ServiceArea>
+              {userInfo.services.map((item, key) => (
+                <ServiceItem key={key}>
+                  <ServiceInfo>
+                    <ServiceName>{item.name}</ServiceName>
+                    <ServicePrice>R$ {item.price}</ServicePrice>
+                  </ServiceInfo>
+                  <ServiceChooseButton>
+                    <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
+                  </ServiceChooseButton>
+                </ServiceItem>
+              ))}
+
+            </ServiceArea>
+          }
           <TestimonialArea>
 
           </TestimonialArea>
