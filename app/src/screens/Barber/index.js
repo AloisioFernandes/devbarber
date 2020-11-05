@@ -4,8 +4,11 @@ import Swiper from 'react-native-swiper'
 
 import Stars from '../../components/Stars'
 
+import FavoriteFullIcon from '../../assets/favorite_full.svg'
 import FavoriteIcon from '../../assets/favorite.svg'
 import BackIcon from '../../assets/back.svg'
+import NavPrevIcon from '../../assets/nav_prev.svg'
+import NavNextIcon from '../../assets/nav_next.svg'
 
 import { 
   Container,
@@ -35,7 +38,11 @@ import {
   ServiceChooseButton,
   ServiceChooseBtnText,
 
-  TestimonialArea
+  TestimonialArea,
+  TestimonialItem,
+  TestimonialInfo,
+  TestimonialName,
+  TestimonialBody
 } from './styles'
 
 import Api from '../../Api'
@@ -51,6 +58,7 @@ export default () => {
     stars: route.params.stars
   })
   const [loading, setLoading] = useState(false)
+  const [favorited, setFavorited] = useState(false)
 
   useEffect(() => {
     const getBarberInfo = async () => {
@@ -59,6 +67,7 @@ export default () => {
       let json = await Api.getBarber(userInfo.id)
       if(json.error === '') {
         setUserInfo(json.data)
+        setFavorited(json.data.favorited)
       } else {
         alert('Erro: ' + json.error)
       }
@@ -100,7 +109,11 @@ export default () => {
               <Stars stars={userInfo.stars} showNumber={true} />
             </UserInfo>
             <UserFavButton>
-              <FavoriteIcon width="24" height="24" fill="#f00" />
+              {favorited ?
+                <FavoriteFullIcon width="24" height="24" fill="#000" />
+                :
+                <FavoriteIcon width="24" height="24" fill="#f00" />
+              }
             </UserFavButton>
           </UserInfoArea>
 
@@ -126,9 +139,28 @@ export default () => {
 
             </ServiceArea>
           }
-          <TestimonialArea>
 
-          </TestimonialArea>
+          {userInfo.testimonials && userInfo.testimonials.length > 0 &&
+            <TestimonialArea>
+              <Swiper
+                style={{height: 110}}
+                showsPagination={false}
+                showsButtons={true}
+                prevButton={<NavPrevIcon width="35" height="35" fill="#000" />}
+                nextButton={<NavNextIcon width="35" height="35" fill="#000" />}
+              >
+                {userInfo.testimonials.map((item, key) => (
+                  <TestimonialItem key={key}>
+                    <TestimonialInfo>
+                      <TestimonialName>{item.name}</TestimonialName>
+                      <Stars stars={item.rate} showNumber={false} />
+                    </TestimonialInfo>
+                    <TestimonialBody>{item.body}</TestimonialBody>
+                  </TestimonialItem>
+                ))}
+              </Swiper>
+            </TestimonialArea>
+          }
         </PageBody>
       </Scroller>
       <BackButton onPress={handleBackButton}>
