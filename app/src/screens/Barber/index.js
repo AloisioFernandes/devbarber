@@ -3,6 +3,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import Swiper from 'react-native-swiper'
 
 import Stars from '../../components/Stars'
+import BarberModal from '../../components/BarberModal'
 
 import FavoriteFullIcon from '../../assets/favorite_full.svg'
 import FavoriteIcon from '../../assets/favorite.svg'
@@ -59,6 +60,8 @@ export default () => {
   })
   const [loading, setLoading] = useState(false)
   const [favorited, setFavorited] = useState(false)
+  const [selectedService, setSelectedService] = useState(null)
+  const [showModal, setShowModal] = useState(false) 
 
   useEffect(() => {
     const getBarberInfo = async () => {
@@ -79,6 +82,16 @@ export default () => {
 
   const handleBackButton = () => {
     navigation.goBack()
+  }
+
+  const handleFavClick = () => {
+    setFavorited(!favorited)
+    Api.setFavorite(userInfo.id)
+  }
+
+  const handleServiceChoose = (key) => {
+    setSelectedService(key)
+    setShowModal(true)
   }
 
   return (
@@ -108,9 +121,9 @@ export default () => {
               <UserInfoName>{userInfo.name}</UserInfoName>
               <Stars stars={userInfo.stars} showNumber={true} />
             </UserInfo>
-            <UserFavButton>
+            <UserFavButton onPress={handleFavClick}>
               {favorited ?
-                <FavoriteFullIcon width="24" height="24" fill="#000" />
+                <FavoriteFullIcon width="24" height="24" fill="#f00" />
                 :
                 <FavoriteIcon width="24" height="24" fill="#f00" />
               }
@@ -131,7 +144,7 @@ export default () => {
                     <ServiceName>{item.name}</ServiceName>
                     <ServicePrice>R$ {item.price}</ServicePrice>
                   </ServiceInfo>
-                  <ServiceChooseButton>
+                  <ServiceChooseButton onPress={() => handleServiceChoose(key)}>
                     <ServiceChooseBtnText>Agendar</ServiceChooseBtnText>
                   </ServiceChooseButton>
                 </ServiceItem>
@@ -165,6 +178,13 @@ export default () => {
       </Scroller>
       <BackButton onPress={handleBackButton}>
         <BackIcon width="44" height="44" fill="#fff" />
+
+        <BarberModal 
+          show={showModal}
+          setShow={setShowModal}
+          user={userInfo}
+          service={selectedService}
+        />
       </BackButton>
     </Container>
   )
