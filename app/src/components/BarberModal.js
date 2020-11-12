@@ -108,6 +108,8 @@ const DateNextArea = styled.TouchableOpacity`
   align-items: flex-start;
 `;
 
+const DateList = styled.ScrollView``;
+
 const months = [
   'Janeiro',
   'Fevereiro',
@@ -144,6 +146,31 @@ export default ({ show, setShow, user, service }) => {
   const [listHours, setListHours] = useState([])
 
   useEffect(() => {
+    let daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate() //recebe o último dia de um mês
+    let newListDays = []
+
+    for(let i = 1; i <= daysInMonth; i++) {
+      let d = new Date(selectedYear, selectedMonth, i)
+      let year = d.getFullYear()
+      let month = d.getMonth() + 1
+      let day = d.getDate()
+      month = month < 10 ? '0' + month : month
+      day = day < 10 ? '0' + day : day
+      let selDate = year + '-' + month + '-' + day
+
+      let availability = user.available.filter(e => e.date === selDate) //verifica se barbeiro está disponível na data selecionada
+
+      newListDays.push({
+        status: availability.length > 0 ? true : false, //define disponibilidade no dia
+        weekday: days[d.getDay()],
+        number: i
+      })
+    }
+
+    setListDays(newListDays)
+  }, [selectedMonth, selectedYear])
+
+  useEffect(() => {
     let today = new Date()
     setSelectedYear( today.getFullYear() )
     setSelectedMonth( today.getMonth() )
@@ -152,11 +179,18 @@ export default ({ show, setShow, user, service }) => {
 
   const handleLeftDateClick = () => {
     let mountDate = new Date(selectedYear, selectedMonth, 1)
-    mountDate.setMonth( mountDate.getMonth() -1 )
+    mountDate.setMonth( mountDate.getMonth() - 1 )
+    setSelectedYear(mountDate.getFullYear())
+    setSelectedMonth(mountDate.getMonth())
+    setSelectedDay(1)
   }
 
   const handleRightDateClick = () => {
-
+    let mountDate = new Date(selectedYear, selectedMonth, 1)
+    mountDate.setMonth( mountDate.getMonth() + 1 )
+    setSelectedYear(mountDate.getFullYear())
+    setSelectedMonth(mountDate.getMonth())
+    setSelectedDay(1)
   }
 
   const handleCloseButton = () => {
@@ -207,6 +241,9 @@ export default ({ show, setShow, user, service }) => {
                 <NavNextIcon width="35" height="35" fill="#000" />
               </DateNextArea>
             </DateInfo>
+            <DateList horizontal={true} showsHorizontalScrollIndicator={false}>
+              
+            </DateList>
           </ModalItem>
 
           <FinishButton onPress={handleFinishClick}>
